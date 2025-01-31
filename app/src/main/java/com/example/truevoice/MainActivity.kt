@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val btnSetDefaultDialer = findViewById<Button>(R.id.btnSetDefaultDialer)
-        val btnMakeCall = findViewById<Button>(R.id.btnMakeCall)
+        val btnMakeCall = findViewById<Button>(R.id.callButton)
 
         // Request Permissions
         requestPermissions()

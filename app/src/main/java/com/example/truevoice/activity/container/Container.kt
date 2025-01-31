@@ -1,5 +1,6 @@
 package com.example.truevoice.activity.container
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.truevoice.MainActivity
 import com.example.truevoice.R
 import com.example.truevoice.activity.container.fragments.CallLogs
 import com.example.truevoice.activity.container.fragments.Contacts
@@ -38,8 +40,9 @@ class Container : AppCompatActivity() {
             insets
         }
 
-
-
+        binding.makeCall.setOnClickListener{
+            startActivity(Intent(this@Container,MainActivity::class.java))
+        }
 
         binding.incommingCl.setOnClickListener {
             binding.incommingCl.visibility=View.INVISIBLE

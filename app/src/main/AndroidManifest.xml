@@ -36,16 +36,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.welcomepage.WelcomeActy"
-            android:exported="false"
-            android:theme="@style/Theme.TrueVoice" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:resizeableActivity="true"
             android:theme="@style/Base.Theme.TrueVoice"
-            tools:targetApi="24"></activity>
+            tools:targetApi="24"/>
     </application>
 
 </manifest>

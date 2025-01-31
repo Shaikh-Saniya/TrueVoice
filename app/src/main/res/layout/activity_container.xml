@@ -9,15 +9,16 @@
     tools:context=".activity.container.Container">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="100dp"
-        android:gravity="center"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -26,8 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
             android:text="Welcome Back !!"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -138,8 +139,8 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp"
-        android:layout_marginStart="90dp"/>
+        tools:layout_editor_absoluteX="146dp"
+        tools:layout_editor_absoluteY="-362dp" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -216,6 +217,20 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeCall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/all_round_white_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintHorizontal_bias="0.9"
+        android:padding="10dp"
+        android:src="@drawable/baseline_call_24"/>
 
 
 
