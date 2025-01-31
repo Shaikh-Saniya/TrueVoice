@@ -1,0 +1,5 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Default application theme with no custom styles -->
+    <style name="Theme.TrueVoice" parent="Theme.MaterialComponents.DayNight">
+    </style>
+</resources>
