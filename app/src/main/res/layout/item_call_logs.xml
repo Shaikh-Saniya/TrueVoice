@@ -15,16 +15,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:text="Phone Number"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/callType"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+    <TextView
         android:id="@+id/callType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/phoneNumber"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:layout_below="@id/phoneNumber"
         android:text="Call Date"
         android:textColor="@color/white"
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/callDate"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:layout_below="@id/phoneNumber"
         android:text="Call Duration"
         android:textColor="@color/white"

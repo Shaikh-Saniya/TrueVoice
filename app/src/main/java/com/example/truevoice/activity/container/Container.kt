@@ -49,8 +49,10 @@ class Container : AppCompatActivity() {
             if( previousFragment!=1) {
             binding.incommingCl.visibility=View.INVISIBLE
             binding.incommingClGrd.visibility=View.VISIBLE
+                binding.CallType.text="Incomming Calls"
                 replaceFragment(previousFragment,IncommingCall())
                 previousFragment=1
+
             }
 
             }
@@ -59,6 +61,7 @@ class Container : AppCompatActivity() {
             if( previousFragment!=2) {
             binding.outgoingCl.visibility=View.INVISIBLE
             binding.outgoingClGrd.visibility=View.VISIBLE
+                binding.CallType.text="Outgoing Call"
                 replaceFragment(previousFragment,OutgoingCall())
                 previousFragment=2
             }
@@ -69,7 +72,7 @@ class Container : AppCompatActivity() {
             if( previousFragment!=3) {
             binding.clLogs.visibility=View.INVISIBLE
             binding.clLogsGrd.visibility=View.VISIBLE
-
+                binding.CallType.text="Call Logs"
                 replaceFragment(previousFragment,CallLogs())
                 previousFragment=3
             }
@@ -79,6 +82,7 @@ class Container : AppCompatActivity() {
             if( previousFragment!=4) {
             binding.contacts.visibility=View.INVISIBLE
             binding.contactsGrd.visibility=View.VISIBLE
+                binding.CallType.text="Contacts"
                 replaceFragment(previousFragment,Contacts())
                 previousFragment=4
             }

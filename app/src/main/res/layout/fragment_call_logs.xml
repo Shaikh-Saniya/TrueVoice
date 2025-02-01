@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="75dp"
     android:background="@android:color/transparent"
+    android:padding="16dp"
     tools:context=".activity.container.fragments.CallLogs">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/callLogRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginStart="95dp" />
 
 </FrameLayout>

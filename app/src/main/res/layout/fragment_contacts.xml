@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="35dp"
     tools:context=".activity.container.fragments.Contacts">
 
     <androidx.recyclerview.widget.RecyclerView
