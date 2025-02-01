@@ -52,18 +52,26 @@ class Contacts : Fragment() {
 
         cursor?.let {
             while (it.moveToNext()) {
-                val name = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                val phoneNumber = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val name =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val phoneNumber =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
                 // Add contact to the list
                 contactList.add(Contact(name, phoneNumber))
             }
             it.close()
-
-            // Set up RecyclerView with fetched contacts
-            contactAdapter = ContactAdapter(contactList)
         }
-    }
+
+            val nameContacts = contactList.filter { it.name.firstOrNull()?.isLetter() == true }
+            val numberContacts = contactList.filter { it.name.firstOrNull()?.isDigit() == true }
+            val sortedNameContacts = nameContacts.sortedBy { it.name }
+            val sortedNumberContacts = numberContacts.sortedBy { it.phoneNumber }
+            val finalSortedList = sortedNameContacts + sortedNumberContacts
+
+            contactAdapter = ContactAdapter(finalSortedList)
+        }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
