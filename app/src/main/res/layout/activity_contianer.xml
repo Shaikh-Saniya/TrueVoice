@@ -13,7 +13,7 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center"
+        android:gravity="start"
         android:layout_marginStart="100dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
@@ -28,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="10dp"
             android:text="Incomming Call"
             android:textColor="#00CFEB"
@@ -46,14 +45,14 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/action_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/CallType"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="11dp"
-            android:src="@drawable/ic_menu_white_24" />
+<!--        <ImageView-->
+<!--            android:id="@+id/action_menu"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_below="@id/CallType"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginEnd="11dp"-->
+<!--            android:src="@drawable/ic_menu_white_24" />-->
 
 
     </RelativeLayout>
