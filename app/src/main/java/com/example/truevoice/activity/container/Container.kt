@@ -34,6 +34,9 @@ class Container : AppCompatActivity() {
 
         binding=ActivityContainerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.incommingCl.visibility=View.INVISIBLE
+        binding.incommingClGrd.visibility=View.VISIBLE
+        replaceFragment(previousFragment,IncommingCall())
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
