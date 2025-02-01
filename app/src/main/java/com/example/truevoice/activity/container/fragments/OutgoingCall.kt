@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.CallLog
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,13 +37,19 @@ class OutgoingCall : Fragment() {
             val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
             val phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
 
-            // Check if the call state is outgoing
             if (TelephonyManager.EXTRA_STATE_OFFHOOK == state) {
-                // Outgoing call has started, fetch fresh data or update the list
                 if (phoneNumber != null) {
                     fetchCallLogs()
                 }
             }
+        }
+    }
+
+    // New OutgoingCall receiver
+    private val outgoingReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER)
+            Log.d("OutgoingCall", "Dialed number: $phoneNumber")
         }
     }
 
@@ -76,7 +83,8 @@ class OutgoingCall : Fragment() {
 
         // Add a selection to query only outgoing calls
         val selection = CallLog.Calls.TYPE + " = ?"
-        val selectionArgs = arrayOf(CallLog.Calls.OUTGOING_TYPE.toString()) // 2 is for outgoing calls
+        val selectionArgs =
+            arrayOf(CallLog.Calls.OUTGOING_TYPE.toString()) // 2 is for outgoing calls
 
         val cursor = requireContext().contentResolver.query(
             CallLog.Calls.CONTENT_URI, null, selection, selectionArgs, CallLog.Calls.DATE + " DESC"
@@ -101,12 +109,14 @@ class OutgoingCall : Fragment() {
                     else -> "Unknown"
                 }
                 val dateMillis = it.getLong(dateIndex)
-                val formattedDate = dateFormat.format(Date(dateMillis)) // Format the date as a string
+                val formattedDate =
+                    dateFormat.format(Date(dateMillis)) // Format the date as a string
 
                 val duration = it.getString(durationIndex)
 
                 // Add the call log entry to the list
                 callLogs.add(CallLogEntry(number, type, formattedDate, duration))
+                Log.d("CallLog", "Fetched outgoing number: $number")
             }
             callLogAdapter.notifyDataSetChanged()
         }
@@ -126,13 +136,20 @@ class OutgoingCall : Fragment() {
     // Register the BroadcastReceiver when the fragment starts
     override fun onStart() {
         super.onStart()
-        val filter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
-        requireContext().registerReceiver(callReceiver, filter)
+        // Register the receiver for incoming calls
+        val incomingCallFilter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+        requireContext().registerReceiver(callReceiver, incomingCallFilter)
+
+        // Register the receiver for outgoing calls
+        val outgoingCallFilter = IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL)
+        requireContext().registerReceiver(outgoingReceiver, outgoingCallFilter)
     }
 
-    // Unregister the BroadcastReceiver when the fragment stops
     override fun onStop() {
         super.onStop()
+        // Unregister the receivers
         requireContext().unregisterReceiver(callReceiver)
+        requireContext().unregisterReceiver(outgoingReceiver)
     }
+
 }
