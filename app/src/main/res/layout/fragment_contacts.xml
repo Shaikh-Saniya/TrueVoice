@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".activity.container.fragments.Contacts">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contactsRV"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Contacts"
-        />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="60dp"/>
 
 </FrameLayout>
