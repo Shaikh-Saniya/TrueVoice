@@ -25,8 +25,7 @@ import com.example.truevoice.databinding.ActivityContianerBinding
 class Container : AppCompatActivity() {
 
    private lateinit var binding: ActivityContianerBinding
-   private var previousFragment=1
-    private lateinit var searchViews: SearchView
+   private var previousFragment=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +34,7 @@ class Container : AppCompatActivity() {
         binding=ActivityContianerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(previousFragment,IncommingCall())
+        previousFragment=1
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -104,6 +104,8 @@ class Container : AppCompatActivity() {
             4 ->{
                 binding.contacts.visibility=View.VISIBLE
                 binding.contactsGrd.visibility=View.INVISIBLE
+            }0->{
+
             }
         }
 

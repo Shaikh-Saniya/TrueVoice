@@ -8,13 +8,13 @@
     android:background="@drawable/all_bg_gradient"
     tools:context=".activity.container.Container">
 
+
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="10dp"
         android:gravity="center"
+        android:layout_marginStart="100dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,8 +81,7 @@
             android:paddingBottom="25dp"
             android:src="@drawable/incoming_call"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/outgoing_cl_grd"
@@ -139,8 +138,11 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="-362dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,6 +166,7 @@
             android:background="@drawable/all_round_white_bg"
             android:elevation="7dp"
             android:padding="10dp"
+            android:visibility="invisible"
             android:src="@drawable/ic_incomming_cl_normal_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
@@ -223,19 +226,16 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/all_round_white_bg"
+        android:contentDescription="@string/action_settings"
+        android:elevation="10dp"
+        android:padding="10dp"
+        android:src="@drawable/baseline_call_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.80"
-        app:layout_constraintHorizontal_bias="0.9"
-        android:padding="10dp"
-        android:src="@drawable/baseline_call_24"/>
-
-
-
-
-
+        app:layout_constraintVertical_bias="0.90"
+        app:layout_constraintHorizontal_bias="0.80"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
