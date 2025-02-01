@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.truevoice.activity.container.fragments.adapters.CallLogAdapter
 import com.example.truevoice.activity.container.fragments.adapters.CallLogEntry
 import com.example.truevoice.databinding.FragmentOutgoingCallBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class OutgoingCall : Fragment() {
 
@@ -85,6 +88,10 @@ class OutgoingCall : Fragment() {
             val dateIndex = it.getColumnIndex(CallLog.Calls.DATE)
             val durationIndex = it.getColumnIndex(CallLog.Calls.DURATION)
 
+            // Initialize SimpleDateFormat to format the timestamp
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+
+
             while (it.moveToNext()) {
                 val number = it.getString(numberIndex)
                 val type = when (it.getInt(typeIndex)) {
@@ -93,10 +100,13 @@ class OutgoingCall : Fragment() {
                     CallLog.Calls.MISSED_TYPE -> "Missed"
                     else -> "Unknown"
                 }
-                val date = it.getString(dateIndex)
+                val dateMillis = it.getLong(dateIndex)
+                val formattedDate = dateFormat.format(Date(dateMillis)) // Format the date as a string
+
                 val duration = it.getString(durationIndex)
 
-                callLogs.add(CallLogEntry(number, type, date, duration))
+                // Add the call log entry to the list
+                callLogs.add(CallLogEntry(number, type, formattedDate, duration))
             }
             callLogAdapter.notifyDataSetChanged()
         }

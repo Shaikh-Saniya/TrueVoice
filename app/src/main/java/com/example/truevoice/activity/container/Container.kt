@@ -20,11 +20,11 @@ import com.example.truevoice.activity.container.fragments.CallLogs
 import com.example.truevoice.activity.container.fragments.Contacts
 import com.example.truevoice.activity.container.fragments.IncommingCall
 import com.example.truevoice.activity.container.fragments.OutgoingCall
-import com.example.truevoice.databinding.ActivityContainerBinding
+import com.example.truevoice.databinding.ActivityContianerBinding
 
 class Container : AppCompatActivity() {
 
-   private lateinit var binding: ActivityContainerBinding
+   private lateinit var binding: ActivityContianerBinding
    private var previousFragment=1
     private lateinit var searchViews: SearchView
 
@@ -32,10 +32,8 @@ class Container : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding=ActivityContainerBinding.inflate(layoutInflater)
+        binding=ActivityContianerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.incommingCl.visibility=View.INVISIBLE
-        binding.incommingClGrd.visibility=View.VISIBLE
         replaceFragment(previousFragment,IncommingCall())
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -48,40 +46,43 @@ class Container : AppCompatActivity() {
         }
 
         binding.incommingCl.setOnClickListener {
+            if( previousFragment!=1) {
             binding.incommingCl.visibility=View.INVISIBLE
             binding.incommingClGrd.visibility=View.VISIBLE
-            if( previousFragment!=1) {
                 replaceFragment(previousFragment,IncommingCall())
+                previousFragment=1
             }
-            previousFragment=1
+
             }
 
         binding.outgoingCl.setOnClickListener {
+            if( previousFragment!=2) {
             binding.outgoingCl.visibility=View.INVISIBLE
             binding.outgoingClGrd.visibility=View.VISIBLE
-            if( previousFragment!=2) {
                 replaceFragment(previousFragment,OutgoingCall())
+                previousFragment=2
             }
-            previousFragment=2
+
         }
 
         binding.clLogs.setOnClickListener {
+            if( previousFragment!=3) {
             binding.clLogs.visibility=View.INVISIBLE
             binding.clLogsGrd.visibility=View.VISIBLE
-            if( previousFragment!=3) {
-                replaceFragment(previousFragment,CallLogs())
-            }
-            previousFragment=3
 
+                replaceFragment(previousFragment,CallLogs())
+                previousFragment=3
+            }
         }
 
         binding.contacts.setOnClickListener {
+            if( previousFragment!=4) {
             binding.contacts.visibility=View.INVISIBLE
             binding.contactsGrd.visibility=View.VISIBLE
-            if( previousFragment!=4) {
                 replaceFragment(previousFragment,Contacts())
+                previousFragment=4
             }
-            previousFragment=4
+
         }
         
     }

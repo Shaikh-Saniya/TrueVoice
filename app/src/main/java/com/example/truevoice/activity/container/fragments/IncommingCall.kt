@@ -74,7 +74,7 @@ class IncommingCall : Fragment() {
 
         // Add a selection to query only outgoing calls
         val selection = CallLog.Calls.TYPE + " = ?"
-        val selectionArgs = arrayOf(CallLog.Calls.OUTGOING_TYPE.toString()) // 2 is for outgoing calls
+        val selectionArgs = arrayOf(CallLog.Calls.INCOMING_TYPE.toString()) // 2 is for outgoing calls
 
         val cursor = requireContext().contentResolver.query(
             CallLog.Calls.CONTENT_URI, null, selection, selectionArgs, CallLog.Calls.DATE + " DESC"

@@ -15,6 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.truevoice.activity.container.fragments.adapters.CallLogAdapter
 import com.example.truevoice.activity.container.fragments.adapters.CallLogEntry
 import com.example.truevoice.databinding.FragmentCallLogsBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import android.telephony.PhoneNumberUtils
+
 
 class CallLogs : Fragment() {
 
@@ -55,20 +60,43 @@ class CallLogs : Fragment() {
             val dateIndex = it.getColumnIndex(CallLog.Calls.DATE)
             val durationIndex = it.getColumnIndex(CallLog.Calls.DURATION)
 
+            // Initialize SimpleDateFormat to format the timestamp
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+
             while (it.moveToNext()) {
-                val number = it.getString(numberIndex)
+                var number = it.getString(numberIndex) ?: "Unknown"
+
+                // Format the number with the desired country code prefix
+                number = formatPhoneNumberWithCountryCode(number, "+91") // Replace "+91" with your desired country code
+
                 val type = when (it.getInt(typeIndex)) {
                     CallLog.Calls.INCOMING_TYPE -> "Incoming"
                     CallLog.Calls.OUTGOING_TYPE -> "Outgoing"
                     CallLog.Calls.MISSED_TYPE -> "Missed"
                     else -> "Unknown"
                 }
-                val date = it.getString(dateIndex)
+                val dateMillis = it.getLong(dateIndex)
+                val formattedDate = dateFormat.format(Date(dateMillis)) // Format the date as a string
+
                 val duration = it.getString(durationIndex)
 
-                callLogs.add(CallLogEntry(number, type, date, duration))
+                // Add the call log entry to the list
+                callLogs.add(CallLogEntry(number, type, formattedDate, duration))
             }
             callLogAdapter.notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * Formats a phone number to include a country code prefix.
+     * If the number already has the prefix, it will not add it again.
+     */
+    private fun formatPhoneNumberWithCountryCode(number: String, countryCode: String): String {
+        return if (number.startsWith("+")) {
+            number // Already in international format, return as is
+        } else {
+            // Add the prefix and ensure no duplicate leading zeros or plus signs
+            "$countryCode${number.trim().replace("^0+".toRegex(), "")}"
         }
     }
 
