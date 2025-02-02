@@ -1,6 +1,7 @@
 package com.example.truevoice
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,9 @@ import androidx.core.view.WindowInsetsCompat
 
 class IncomingCallActivity : AppCompatActivity() {
 
+    private val REQUEST_PERMISSIONS = 1001
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,11 +50,13 @@ class IncomingCallActivity : AppCompatActivity() {
     }
 
     private fun checkPermissions() {
+        // Check if necessary permissions are granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // Request permissions if not granted
             requestPermissions(
                 arrayOf(Manifest.permission.CALL_PHONE, Manifest.permission.READ_PHONE_STATE),
-                1001
+                REQUEST_PERMISSIONS
             )
         }
     }
@@ -63,6 +69,7 @@ class IncomingCallActivity : AppCompatActivity() {
                     Manifest.permission.ANSWER_PHONE_CALLS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                Toast.makeText(this, "Permission to answer calls is required", Toast.LENGTH_SHORT).show()
                 return
             }
             telecomManager.acceptRingingCall()
@@ -79,12 +86,32 @@ class IncomingCallActivity : AppCompatActivity() {
                     Manifest.permission.ANSWER_PHONE_CALLS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-
+                Toast.makeText(this, "Permission to end calls is required", Toast.LENGTH_SHORT).show()
                 return
             }
             telecomManager.endCall()
         } else {
             Toast.makeText(this, "This feature requires Android 9.0 or higher.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Handle the result of the permission request
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted, you can proceed with call functionality
+                Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
+            } else {
+                // Permissions denied, show a message or prompt the user to allow permissions
+                Toast.makeText(this, "Permissions denied, unable to answer/end calls", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

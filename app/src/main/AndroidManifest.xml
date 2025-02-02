@@ -12,6 +12,12 @@
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS"/>
+
 
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -65,7 +71,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <service android:name=".service.CallListenerService"
+            android:enabled="true"
+            android:exported="false">
+        <intent-filter>
+            <action android:name="android.telecom.action.DEFAULT_DIALER" />
+        </intent-filter>
+        </service>
 
     </application>
+
+
 
 </manifest>

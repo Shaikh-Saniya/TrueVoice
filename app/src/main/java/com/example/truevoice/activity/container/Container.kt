@@ -8,9 +8,6 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,16 +24,24 @@ import com.example.truevoice.activity.container.fragments.Contacts
 import com.example.truevoice.activity.container.fragments.IncommingCall
 import com.example.truevoice.activity.container.fragments.OutgoingCall
 import com.example.truevoice.databinding.ActivityContianerBinding
+import android.content.Context
+import android.provider.Settings
+import android.telecom.TelecomManager
+import com.example.truevoice.service.CallListenerService
+
 
 class Container : AppCompatActivity() {
 
    private lateinit var binding: ActivityContianerBinding
    private var previousFragment=0
     private val PERMISSIONS_REQUEST_CODE = 123
+    private lateinit var telephonyManager: TelephonyManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val serviceIntent = Intent(this, CallListenerService::class.java)
+        startService(serviceIntent)
 
         checkAndRequestPermissions()
 
@@ -49,6 +54,26 @@ class Container : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        if (arePermissionsGranted()) {
+            val telecomManager = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+            val defaultDialerPackage = telecomManager.defaultDialerPackage
+            if (defaultDialerPackage == packageName) {
+                Toast.makeText(this@Container, "True Voice is your default dialer app", Toast.LENGTH_LONG).show()
+            } else {
+                val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
+                startActivity(intent)
+            }
+        } else {
+            // Prompt for necessary permissions if not granted
+            requestPermissions(arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.ANSWER_PHONE_CALLS
+            ), PERMISSIONS_REQUEST_CODE)
+        }
+
+
 
         binding.makeCall.setOnClickListener{
             startActivity(Intent(this@Container,MainActivity::class.java))
@@ -127,38 +152,58 @@ class Container : AppCompatActivity() {
 
     }
     private fun checkAndRequestPermissions() {
-        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), PERMISSIONS_REQUEST_CODE)
+        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+            checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
+            checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.ANSWER_PHONE_CALLS
+            ), PERMISSIONS_REQUEST_CODE)
         } else {
             listenForIncomingCalls()
         }
+    }
+
+    private fun arePermissionsGranted(): Boolean {
+        return checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSIONS_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            listenForIncomingCalls()
-        } else {
-            Toast.makeText(this, "Permission denied. Cannot detect incoming calls.", Toast.LENGTH_SHORT).show()
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                listenForIncomingCalls()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Permissions denied. Cannot proceed without required permissions.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     private fun listenForIncomingCalls() {
-        val telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+        telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
+        // Register the PhoneStateListener
         telephonyManager.listen(object : PhoneStateListener() {
             override fun onCallStateChanged(state: Int, phoneNumber: String?) {
                 when (state) {
                     TelephonyManager.CALL_STATE_RINGING -> {
-                        // Incoming call detected
+                        // Call is incoming, show UI
                         showIncomingCallUI(phoneNumber)
                     }
                     TelephonyManager.CALL_STATE_OFFHOOK -> {
-                        // Call answered or active
+                        // Call is answered
                         Toast.makeText(this@Container, "Call Answered", Toast.LENGTH_SHORT).show()
                     }
                     TelephonyManager.CALL_STATE_IDLE -> {
-                        // No active call
+                        // Call ended or no call is active
                         Toast.makeText(this@Container, "No Call Active", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -167,8 +212,13 @@ class Container : AppCompatActivity() {
     }
 
     private fun showIncomingCallUI(phoneNumber: String?) {
-        val intent = Intent(this, IncomingCallActivity::class.java)
-        intent.putExtra("CALLER_NUMBER", phoneNumber)
-        startActivity(intent)
+        // Show your custom UI for incoming calls
+        Toast.makeText(this, "Incoming Call: $phoneNumber", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Don't forget to unregister the listener when the activity is destroyed
+        telephonyManager.listen(null, PhoneStateListener.LISTEN_NONE)
     }
 }
