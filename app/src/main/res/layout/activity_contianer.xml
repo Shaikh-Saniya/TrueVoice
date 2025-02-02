@@ -237,19 +237,20 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/makeCall"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/all_round_white_bg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:foregroundGravity="center"
+        android:background="@drawable/side_nav_bar"
         android:contentDescription="@string/action_settings"
         android:elevation="10dp"
         android:padding="10dp"
-        android:src="@drawable/baseline_call_24"
+        android:src="@drawable/dail_pad"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90"
-        app:layout_constraintHorizontal_bias="0.80"/>
+        app:layout_constraintVertical_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.90"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
