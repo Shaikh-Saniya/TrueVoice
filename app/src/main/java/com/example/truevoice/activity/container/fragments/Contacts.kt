@@ -28,14 +28,24 @@ class Contacts : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check for permission
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
-            == PackageManager.PERMISSION_GRANTED) {
-            // Fetch contacts if permission is granted
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), 100)
+        } else {
+            fetchContacts()
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 101 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             fetchContacts()
         } else {
-            // Request permission if not granted
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_CONTACTS), 1)
+            Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -89,15 +99,5 @@ class Contacts : Fragment() {
     }
 
     // Handle runtime permission result
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, fetch contacts
-                fetchContacts()
-            } else {
-                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+
 }
