@@ -1,21 +1,19 @@
 package com.example.truevoice
+
 import android.Manifest
-import android.app.role.RoleManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.telecom.TelecomManager
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.truevoice.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -28,48 +26,61 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val btnSetDefaultDialer = findViewById<Button>(R.id.btnSetDefaultDialer)
-        val btnMakeCall = findViewById<Button>(R.id.callButton)
+        // Initialize View Binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Request Permissions
+        // Set up dial pad buttons
+        val dialPadButtons = listOf(
+            binding.one,
+            binding.two,
+            binding.three,
+            binding.four,
+            binding.five,
+            binding.six,
+            binding.seven,
+            binding.eight,
+            binding.nine,
+            binding.zero,
+            binding.star,
+            binding.hash
+        )
+
+        // Add listeners for dial pad buttons
+        dialPadButtons.forEach { button ->
+            button?.setOnClickListener {
+                val input = button?.text.toString()
+                binding.phoneNumber?.append(input)
+            }
+        }
+
+        // Clear the entered number
+        binding.clearBtn?.setOnClickListener {
+            binding.phoneNumber?.text = ""
+        }
+
+        // Make a call
+        binding.callBtn?.setOnClickListener {
+            var phoneNumber = binding.phoneNumber?.text.toString()
+            if (phoneNumber.isNotEmpty()) {
+                makeCall(phoneNumber)
+                phoneNumber= " "
+            } else {
+                Toast.makeText(this, "Enter a valid phone number", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Request necessary permissions
         requestPermissions()
-
-        // Set Default Dialer
-        btnSetDefaultDialer.setOnClickListener {
-            setDefaultDialer()
-        }
-
-        // Make Outgoing Call
-        btnMakeCall.setOnClickListener {
-            makeCall("+1234567890") // Replace with a real phone number
-        }
     }
 
     private fun requestPermissions() {
         requestPermissionLauncher.launch(
             arrayOf(
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.ANSWER_PHONE_CALLS,
-                Manifest.permission.MODIFY_PHONE_STATE
+                Manifest.permission.CALL_PHONE
             )
         )
-    }
-
-    private fun setDefaultDialer() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val roleManager = getSystemService(RoleManager::class.java)
-            if (roleManager.isRoleAvailable(RoleManager.ROLE_DIALER)) {
-                val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
-                startActivityForResult(intent, 100)
-            }
-        } else {
-            val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
-            intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
-            startActivity(intent)
-        }
     }
 
     private fun makeCall(phoneNumber: String) {
@@ -79,5 +90,6 @@ class MainActivity : AppCompatActivity() {
         }
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
         startActivity(intent)
+        binding.phoneNumber?.text=""
     }
 }
